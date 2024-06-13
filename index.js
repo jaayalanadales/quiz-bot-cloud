@@ -5,6 +5,14 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
+import express from 'express'
+const app = express()
+const port = 49279;
+
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
+})
+
 // Reemplaza 'YOUR_TELEGRAM_BOT_TOKEN' con el token que te dio el BotFather
 const token = '7430626312:AAEJpCjYbuKsdGs9ZHiEsrwrBWkvS4KDzvs';
 

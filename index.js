@@ -21,27 +21,38 @@ const bot = new telegramBot(token, { polling: true });
 
 // Preguntas del quiz
 const questions = [
-  { question: '¿Cuántos días tiene una semana?', answer: 7 },
-  { question: '¿Cuántos planetas hay en el sistema solar?', answer: 8 },
-  { question: '¿Cuántos minutos hay en una hora?', answer: 60 },
-  { question: '¿Cuántas horas hay en un día?', answer: 24 },
-  { question: '¿Cuántas semanas tiene un año?', answer: 52 },
-  { question: '¿Cuántos meses tiene un año?', answer: 12 },
-  { question: '¿Cuántos centímetros hay en un metro?', answer: 100 },
-  { question: '¿Cuántos mililitros hay en un litro?', answer: 1000 },
-  { question: '¿Cuántos años hay en una década?', answer: 10 },
-  { question: '¿Cuántos huesos tiene el cuerpo humano adulto?', answer: 206 },
-  { question: '¿Cuántos estados tiene Estados Unidos?', answer: 50 },
-  { question: '¿Cuántos segundos hay en un minuto?', answer: 60 },
-  { question: '¿Cuántos colores hay en el arcoíris?', answer: 7 },
-  { question: '¿Cuántas patas tiene una araña?', answer: 8 },
-  { question: '¿Cuántas teclas tiene un piano estándar?', answer: 88 },
+  { question: '¿En qué año se descubrió América?', answer: 1492 },
+  { question: '¿Cuántos años tiene la cantante japonesa Ado? (Suponiendo que estamos en Junio de 2024)', answer: 21 },
+  { question: '¿Cuántas veces ha ganado Antonio Martínez Ares, el Goku del carnaval, el primer premio de Comparsas del Carnaval de Cádiz? (Suponiendo que estamos en Junio de 2024)', answer: 10 },
   { question: '¿Cuántos elementos hay en la tabla periódica?', answer: 118 },
-  { question: '¿Cuántos anillos olímpicos hay?', answer: 5 },
-  { question: '¿Cuántos continentes hay en el mundo?', answer: 7 },
+  { question: '¿Cuántas teclas tiene un piano estándar?', answer: 88 },
+  { question: '¿Cuántos estados tiene Estados Unidos?', answer: 50 },
+  { question: '¿Cuántos huesos tiene el cuerpo humano adulto?', answer: 206 },
   { question: '¿Cuántas cartas hay en un mazo de cartas estándar sin contar los comodines?', answer: 52 },
-  { question: '¿Cuántos jugadores hay en un equipo de fútbol en el campo?', answer: 11 }
+  { question: '¿Cuántos dedos tiene una rata en su pata trasera?', answer: 5 },
+  { question: '¿Cuánto suman los pelos que tiene en la cabeza Ras, más los pelos que tiene en la cabeza Eusebio, más los pelos que tiene en la cabeza Antonio el peluso?', answer: 0 },
+  { question: '¿Cuántos segundos hay en 2 horas y 24 minutos?', answer: 8640 },
+  { question: '¿En qué año murió Juan Carlos Aragón Becerra, el Eterno Capitán Veneno?', answer: 2019 },
+  { question: '¿En qué año empezó a publicarse el manga One Piece?', answer: 1997 },
+  { question: '¿Cuántos capítulos tiene el anime Dragon Ball Z?', answer: 291 },
+  { question: '¿Cuántos mundos visitas en Kingdom Hearts 1?', answer: 13 },
+  { question: '¿Cuántos hijos tiene Heihachi Mishima (Tekken), contando ilegítimos y adoptados?', answer: 4 },
+  { question: '¿Cuántos eones hay en Final Fantasy X?', answer: 8 },
+  { question: '¿En qué año se lanzó el juego para PC League of Legends?', answer: 2009 },
+  { question: '¿En qué año se descubrió la estructura del ADN?', answer: 1953 },
+  { question: '¿En qué año terminó la Segunda Guerra Mundial?', answer: 1945 },
+  { question: '¿Cuántas temporadas tiene la serie "Friends"?', answer: 10 },
+  { question: '¿Cuántos libros componen la serie "Harry Potter"?', answer: 7 },
+  { question: '¿Cuántos pares de cromosomas tiene el ser humano?', answer: 23 },
+  { question: '¿En qué año se lanzó el primer juego de la serie "The Legend of Zelda"?', answer: 1986 },
+  { question: '¿En qué año se lanzó el primer juego de la serie "Resident Evil"?', answer: 1996 },
+  { question: '¿Cuántos volúmenes tiene el manga "Attack on Titan" (Shingeki no Kyojin)?', answer: 34 },
+  { question: '¿Cuántos personajes jugables hay en "Super Smash Bros. Ultimate"?', answer: 89 },
+  { question: '¿Cuántos finales diferentes tiene "Nier: Automata"?', answer: 26 },
+  { question: '¿En qué año se lanzó el manga "My Hero Academia"?', answer: 2014 },
+  { question: '¿Cuántos capítulos tiene el anime "Fullmetal Alchemist: Brotherhood"?', answer: 64 }
 ];
+
 
 // Variables de estado del quiz
 let currentQuestionIndex = 0;
@@ -103,15 +114,30 @@ const stopQuiz = (chatId) => {
   }
 };
 
+// Función para enviar las reglas del quiz
+const sendRules = (chatId) => {
+  const rulesMessage = `Lista de reglas (/rules para mostrar):
+1. Hay un total de 30 preguntas.
+2. TODAS las respuestas son un número.
+3. El orden de las preguntas es completamente aleatorio, cambia cada vez que se empieza el quiz.
+4. Tienes 10 segundos para responder cada pregunta.
+5. Si te equivocas o tardas más de 10 segundos, el quiz se reinicia.
+6. Puedes detener el quiz en cualquier momento con /stop.
+7. Para comenzar, escribe /quiz.
+8. Una vez respondidas las 30 preguntas seguidas se revelará el número.`;
+
+  bot.sendMessage(chatId, rulesMessage);
+};
+
 // Manejar el comando de inicio
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, `¡Bienvenido al quiz! Aquí están las reglas:
-1. Responde cada pregunta con un número.
-2. Tienes 10 segundos para responder cada pregunta.
-3. Si te equivocas o tardas más de 10 segundos, el quiz se reinicia.
-4. Puedes detener el quiz en cualquier momento con /stop.
-Para comenzar, escribe /quiz.`);
+  
+  // Mensaje de introducción
+  bot.sendMessage(chatId, `¡Hola! Soy Señor Numérico, tu compañero apasionado de los números. Estoy aquí para ponerte a prueba con un maravilloso quiz. ¡Vamos a divertirnos y a aprender juntos!`);
+  
+  // Mensaje con las reglas
+  sendRules(chatId);
 });
 
 // Manejar el comando del quiz
@@ -124,6 +150,12 @@ bot.onText(/\/quiz/, (msg) => {
 bot.onText(/\/stop/, (msg) => {
   const chatId = msg.chat.id;
   stopQuiz(chatId);
+});
+
+// Manejar el comando /rules
+bot.onText(/\/rules/, (msg) => {
+  const chatId = msg.chat.id;
+  sendQuestion(chatId)
 });
 
 // Manejar mensajes de los usuarios

@@ -84,7 +84,7 @@ const sendQuestion = () => {
       }
     }, 10000);
   } else if (quizActive) {
-    bot.sendMessage(currentChatId, '¡Felicidades! Has completado el quiz.');
+    bot.sendMessage(currentChatId, '¡Felicidades! Has completado el quiz, el número que buscas es el 7.');
     quizActive = false;
   }
 };
